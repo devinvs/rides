@@ -8,7 +8,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="ride" element={<ViewEventPage />} />
+        <Route path="event" element={<ViewEventPage />} />
         <Route index path="*" element={<CreateEventPage />} />
       </Routes>
     </BrowserRouter>
