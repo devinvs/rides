@@ -9,9 +9,40 @@
 
 .display-event {
     flex: 0 0 50%;
+    padding: 0;
+    margin: 0;
+    
+}
+.display-event ul {
+    list-style-type: none;
 }
 
 .car {
     background-color: aquamarine;
     flex: 0 0 50%;
+    display: flex;
+    margin: 1em;
+    padding: 0.5em;
+    border-radius: 0.5em;
+}
+
+.riders {
+    display: flex;
+}
+.rider{
+    display: block;
+    background-color: blueviolet;
+    padding: 1em;
+    margin: 1em;
+    width: 100px;
+    height: 50px;
+}
+
+.empty-seat button {
+    display: block;
+    background-color: blueviolet;
+    padding: 1em;
+    margin: 1em;
+    width: 100px;
+    height: 50px;
 }

@@ -21,22 +21,36 @@ const UserRegister = (props) => {
 
 const Car = (props) => {
     let car = props.car;
+    let seatsRemaining = car.capacity - car.riders.length;
+    const emptySeats = [];
+    for (let i = 0; i < seatsRemaining; i++) {
+        emptySeats.push(
+            <button value="Join Car"></button>  
+        )
+    }
 
     return (
         <div className="car">
             <div>
-                <h3>Driver</h3>
                 <p>{car.driver}</p>
             </div>
-            <div>
-                <h4>Passengers</h4>
-                <ul>
-                    {car.riders.map(rider =>
-                        <li>{rider}</li>)}
+            <div >
+                <ul className="riders">
+                    {
+                        car.riders.map(rider =>
+                        <li className="rider">{rider}</li>)
+                    }
+                    {
+                        emptySeats.map(emptySeat => 
+                            <li className="empty-seat">
+                                <button value="Join Car"></button>
+                            </li>)
+                    }
                 </ul>
             </div>
+
             <div>
-                <button value="Join Car"></button>
+                
             </div>
         </div>
     )

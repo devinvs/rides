@@ -11,11 +11,11 @@ app.get('/events/:eventId', (req, res) => {
     res.json({
         name: "The Best Event",
         cars: [{
-            capacity: 3,
+            capacity: 4,
             riders: ["Devin", "Mathew", "Justin"],
             driver: "Nicholas"
         }, {
-            capacity: 1,
+            capacity: 4,
             riders: ["Bob"],
             driver: "Joe"
         }],
