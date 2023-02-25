@@ -1,7 +1,7 @@
 import "./CreateEvent.css";
 import {createEvent} from "./api-utils";
 
-import {apiBase, useState} from 'react';
+import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 export function CreateEventPage(_) {
@@ -26,7 +26,8 @@ export function CreateEventPage(_) {
         createEvent(name)
             .then(res => {
                 // On success we redirect to the appropriate page for their event
-                const url = `${apiBase}/events?e=${res.id}`
+                console.log(res);
+                const url = `/events?e=${res.id}`
                 navigate(url);
             })
             .catch((e) => {
@@ -41,7 +42,7 @@ export function CreateEventPage(_) {
 
             <br />
             <input type="submit" value="Create" onClick={newEvent}/>
-            <p class="error">{error}</p>
+            <p className="error">{error}</p>
         </div>
     )
 }

@@ -27,7 +27,7 @@ app.post('/events', (_, res) => {
     console.log("Receive post for /events");
 
     res.json({
-        name: "The Best Event"
+        id: "8489293894874"
     })
 })
 

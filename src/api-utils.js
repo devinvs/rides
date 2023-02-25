@@ -1,4 +1,4 @@
-export const apiBase = "";
+export const apiBase = "http://localhost:5000";
 
 export async function getEvent(eventId) {
     try {
