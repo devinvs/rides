@@ -9,41 +9,6 @@
     font-size: 1.2rem;
 }
 
-.display-event {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-}
-
-.car {
-    background-color: aquamarine;
-    flex: 0 0 50%;
-    display: flex;
-    margin: 1em;
-    padding: 0.5em;
-    border-radius: 0.5em;
-}
-
-.car li {
-    width: 10em;
-    height: 5em;
-    margin: 1em;
-    padding: 0.5em;
-    border-radius: 0.5em;
-}
-
-.riders {
-    display: flex;
-}
-.rider{
-    display: block;
-    background-color: blueviolet;
-}
-
-.empty-seat button {
-    display: block;
-    background-color: blueviolet;
-}
-
 form {
     display: flex;
     flex-direction: column;

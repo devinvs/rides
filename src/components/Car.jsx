@@ -1,3 +1,5 @@
+import "./Car.css";
+
 export function Car(props) {
     let car = props.car;
     let seatsRemaining = car.capacity - car.riders.length;

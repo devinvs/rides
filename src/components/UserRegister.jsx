@@ -1,3 +1,5 @@
+import "./UserRegister.css";
+
 export function UserRegister(props) {
 
     return (

@@ -1,4 +1,5 @@
 import { Car } from "./Car";
+import "./DisplayEvent.css";
 
 export function DisplayEevnt(props) {
     let event = props.event;
