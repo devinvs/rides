@@ -30,12 +30,12 @@ const Car = (props) => {
     }
 
     return (
-        <div className="car">
-            <div>
-                <p>{car.driver}</p>
-            </div>
-            <div >
+        <div >
+            <p>{car.driver}</p>
+            <div className="car">
                 <ul className="riders">
+                    <li>
+                    </li>
                     {
                         car.riders.map(rider =>
                         <li className="rider">{rider}</li>)
@@ -43,14 +43,10 @@ const Car = (props) => {
                     {
                         emptySeats.map(emptySeat => 
                             <li className="empty-seat">
-                                <button value="Join Car"></button>
+                                <button>Join Car</button>
                             </li>)
                     }
                 </ul>
-            </div>
-
-            <div>
-                
             </div>
         </div>
     )

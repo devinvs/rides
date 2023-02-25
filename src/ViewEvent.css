@@ -26,23 +26,23 @@
     border-radius: 0.5em;
 }
 
+.car li {
+    width: 10em;
+    height: 5em;
+    margin: 1em;
+    padding: 0.5em;
+    border-radius: 0.5em;
+}
+
 .riders {
     display: flex;
 }
 .rider{
     display: block;
     background-color: blueviolet;
-    padding: 1em;
-    margin: 1em;
-    width: 100px;
-    height: 50px;
 }
 
 .empty-seat button {
     display: block;
     background-color: blueviolet;
-    padding: 1em;
-    margin: 1em;
-    width: 100px;
-    height: 50px;
 }
