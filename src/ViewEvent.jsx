@@ -1,19 +1,18 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import "./ViewEvent.css";
-import { getEvent } from "./api-utils";
+import {getEvent } from "./api-utils";
 
 const UserRegister = (props) => {
 
     return (
         <>
             <form>
-                <label>
-                    Name:
-                    <input type="text" name="Enter name"/>
-                </label>
-                <input type="submit" value="I need a ride" />
-                <input type="submit" value="I can drive" />
+                <input type="text" placeholder="Enter name"/>
+                <div>
+                    <input type="submit" value="I need a ride" />
+                    <input type="submit" value="I can drive" />
+                </div>
             </form>
         </>
     )
@@ -56,15 +55,12 @@ const DisplayEevnt = (props) => {
     let event = props.event;
 
     return (
-        <div className="display-event">
-            <h1>Available Cars</h1>
-            <ul>
-                {event.cars.map(car =>
-                    <li>
-                        <Car car={car} />
-                    </li>
-                )}
-            </ul>
+        <div className="parking-lot">
+            {event.cars.map(car =>
+                <>
+                <Car car={car} />
+                </>
+            )}
         </div>
     )
 };
@@ -72,8 +68,9 @@ const DisplayEevnt = (props) => {
 export function ViewEventPage(props) {
     const [event, setEvent] = useState();
     const [searchParams] = useSearchParams();
+
     let eventIdParam = searchParams.get("e");
-    console.log(eventIdParam);
+    let invite_url = `${window.location}`;
 
     const fetchEventFromApi = (eventId) => {
         getEvent(eventId)
@@ -92,12 +89,12 @@ export function ViewEventPage(props) {
             {event ? (
                 <div className="view-event-page">
                     <div className="banner">
-                        <p>Hello the from View Event Page</p>
-                        <p>You are viewing the event {event.id}</p>
+                        <p>Invite Friends: <a href={invite_url}>{invite_url}</a></p>
                     </div>
-                    
-                    <UserRegister />
-                    <DisplayEevnt event={event} />
+                    <div className="display-event">
+                        <UserRegister />
+                        <DisplayEevnt event={event} />
+                    </div>
                 </div>
             ) : (
                 <p>Loading</p>
