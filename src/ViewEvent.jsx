@@ -1,34 +1,29 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import "./CreateEvent.css";
+import "./ViewEvent.css";
 import { getEvent } from "./api-utils";
-
-const dummyEvent = {
-    id: 2023,
-    cars: [
-        {
-        capcity: 6,
-        riders: ["Mat", "Nic", "Dev"],
-        driver: "Justin",
-        },
-        {
-        capcity: 4,
-        riders: ["Andrew", "Nate"],
-        driver: "Jaron",
-        },
-    ],
-    unassigned: ["Logan", "Bill"],
-};
 
 const UserRegister = (props) => {
 
+    return (
+        <>
+            <form>
+                <label>
+                    Name:
+                    <input type="text" name="Enter name"/>
+                </label>
+                <input type="submit" value="I need a ride" />
+                <input type="submit" value="I can drive" />
+            </form>
+        </>
+    )
 };
 
 const Car = (props) => {
     let car = props.car;
 
     return (
-        <>
+        <div className="car">
             <div>
                 <h3>Driver</h3>
                 <p>{car.driver}</p>
@@ -43,7 +38,7 @@ const Car = (props) => {
             <div>
                 <button value="Join Car"></button>
             </div>
-        </>
+        </div>
     )
 }
 
@@ -51,7 +46,7 @@ const DisplayEevnt = (props) => {
     let event = props.event;
 
     return (
-        <>
+        <div className="display-event">
             <h1>Available Cars</h1>
             <ul>
                 {event.cars.map(car =>
@@ -60,7 +55,7 @@ const DisplayEevnt = (props) => {
                     </li>
                 )}
             </ul>
-        </>
+        </div>
     )
 };
 
@@ -71,10 +66,9 @@ export function ViewEventPage(props) {
     console.log(eventIdParam);
 
     const fetchEventFromApi = (eventId) => {
-        setEvent(dummyEvent);
-        // getEvent(eventId)
-        //     .then(fectchedEvent => setEvent(fectchedEvent))
-        //     .catch(error => console.error(error));
+        getEvent(eventId)
+            .then(fectchedEvent => setEvent(fectchedEvent))
+            .catch(error => console.error(error));
     };
 
     useEffect(() => {
@@ -86,20 +80,15 @@ export function ViewEventPage(props) {
   return (
         <>
             {event ? (
-                <>
-                    <div>
+                <div className="view-event-page">
+                    <div className="banner">
                         <p>Hello the from View Event Page</p>
                         <p>You are viewing the event {event.id}</p>
                     </div>
                     
-                    <div>
-                        <UserRegister />
-                    </div>
-                  
-                    <div>
-                        <DisplayEevnt event={event} />
-                    </div>
-                </>
+                    <UserRegister />
+                    <DisplayEevnt event={event} />
+                </div>
             ) : (
                 <p>Loading</p>
             )}

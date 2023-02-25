@@ -1,13 +1,9 @@
 export const apiBase = "http://localhost:5000";
 
+// Get the data for an event
 export async function getEvent(eventId) {
-    try {
-        const response = await fetch(`${apiBase}/events/${eventId}`)
-        return response.json();
-    }
-    catch (error) {
-        return error;
-    }
+    const res = await fetch(`${apiBase}/events/${eventId}`);
+    return await res.json();
 }
 
 // Create a new event and returns the id of the event

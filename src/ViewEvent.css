@@ -1,0 +1,17 @@
+.view-event-page {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.banner {
+    flex: 0 0 100%;
+}
+
+.display-event {
+    flex: 0 0 50%;
+}
+
+.car {
+    background-color: aquamarine;
+    flex: 0 0 50%;
+}
