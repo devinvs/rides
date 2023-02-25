@@ -1,3 +1,4 @@
+import { abbreviate } from "../util";
 import "./Car.css";
 
 export function Car(props) {
@@ -11,24 +12,20 @@ export function Car(props) {
     }
 
     return (
-        <div >
-            <p>{car.driver}</p>
-            <div className="car">
-                <ul className="riders">
-                    <li>
-                    </li>
-                    {
-                        car.riders.map(rider =>
-                        <li className="rider">{rider}</li>)
-                    }
-                    {
-                        emptySeats.map(emptySeat => 
-                            <li className="empty-seat">
-                                <button>Join Car</button>
-                            </li>)
-                    }
-                </ul>
-            </div>
+        <div className="car">
+            <p className="driver">{car.driver}</p>
+            <ul className="riders">
+                {
+                    car.riders.map(rider =>
+                    <li className="rider"><p>{abbreviate(rider)}</p></li>)
+                }
+                {
+                    emptySeats.map(emptySeat => 
+                        <li className="empty-seat">
+                            <button>Join</button>
+                        </li>)
+                }
+            </ul>
         </div>
     )
 }

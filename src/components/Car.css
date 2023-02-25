@@ -1,18 +1,30 @@
 .car {
-    background-color: aquamarine;
-    flex: 0 0 50%;
+    background-color: #dad0b2;
     display: flex;
     margin: 1em;
-    padding: 0.5em;
     border-radius: 0.5em;
+    padding: 2em;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.driver {
+    align-self: center;
+    width: 70px;
+    font-size: 1em;
+}
+
+.car ul {
+    display: grid;
+    grid-auto-flow:column dense; /* column flow with "dense" to fill all the cells */
+    grid-template-rows:auto auto; /* 2 rows */
+    gap: 10px;
 }
 
 .car li {
-    width: 10em;
-    height: 5em;
-    margin: 1em;
-    padding: 0.5em;
-    border-radius: 0.5em;
+    margin: 10px;
+    list-style: none;
+    border-radius: 5px;
 }
 
 .riders {
@@ -20,10 +32,26 @@
 }
 .rider{
     display: block;
-    background-color: blueviolet;
+    background-color: #913537;
+    text-align: center;
+    width: 50px;
+    height: 50px;
+    font-size: 1em;
+    color: white;
 }
 
 .empty-seat button {
     display: block;
-    background-color: blueviolet;
+    width: 50px;
+    height: 50px;
+    padding: 2px;
+    font-size: 1em;
+    border-radius: 5px;
+    color: block;
+    background-color: white;
+}
+
+.empty-seat button:hover {
+    background-color: #bb5355;
+    color: white;
 }
