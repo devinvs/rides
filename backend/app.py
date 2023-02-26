@@ -5,7 +5,7 @@ import database
 from database import Car, Event
 from database import db_session as session
 
-app = Flask(__name__)
+app = Flask(__name__, instance_relative_config=True, static_folder="../build", static_url_path="/")
 CORS(app)
 
 @app.teardown_appcontext
@@ -16,7 +16,11 @@ def shutdown_session(exception=None):
 
 @app.route("/")
 def main_page():
-    return "<p>Frontend! Wow!</p>"
+    return app.send_static_file('index.html')
+
+@app.errorhandler(404)
+def not_found():
+    return app.send_static_file('index.html')
 
 
 @app.route("/events/<event_id>", methods=["GET"])
