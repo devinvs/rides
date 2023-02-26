@@ -1,9 +1,21 @@
 import { abbreviate } from "../util";
+import {useState} from 'react';
 import "./Car.css";
+
+const colors = ["red", "blue", "green", "purple", "orange"]
+
+const getColor = (cap) => {
+    if (cap >= 12) { return "black" }
+
+
+    return colors[Math.floor(Math.random() * colors.length)];
+}
 
 export function Car(props) {
     let car = props.car;
     let seatsRemaining = car.capacity - car.riders.length;
+
+    const [color, _] = useState(getColor(car.capacity));
 
     let contWidth = props.contWidth;
 
@@ -14,7 +26,7 @@ export function Car(props) {
     ));
 
     for (let i = 0; i < seatsRemaining; i++) {
-        seats.push(<button className="empty-seat">Join</button>)
+        seats.push(<button className="empty-seat">Join</button>);
     }
 
     let renderedSeats = [];
@@ -33,19 +45,20 @@ export function Car(props) {
 
             renderedSeats[i].push(seats[num]);
         }
+        renderedSeats[i].reverse();
     }
 
     return (
         <div className="car">
             <p className="driver">{car.driver}</p>
-            <div className="riders">
+            <div className={"riders " + color}>
                 <div className="wheel1" />
                 <div className="wheel2" />
                 {
-                    renderedSeats.map((row, i) =>
+                    renderedSeats.map(row =>
                         <div className="rider-row">
                             {
-                                row.map((cell, i) =>
+                                row.map(cell =>
                                     {return cell}
                             )}
                         </div>

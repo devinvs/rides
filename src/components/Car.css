@@ -80,3 +80,22 @@
 .wheel4 {
     right: 60px;
 }
+
+.red {
+    background-color: #c64348;
+}
+.blue {
+    background-color: #4642b7;
+}
+.green {
+    background-color: #51c158;
+}
+.purple {
+    background-color: #9150af;
+}
+.orange {
+    background-color: #e09c35;
+}
+.black {
+    background-color: #202224;
+}
