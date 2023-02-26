@@ -60,7 +60,7 @@ class Event(Based):
             "id": self.event_id,
             "name": self.name,
             "cars": [car.json() for car in self.cars],
-            "unassigned": get_unassigned(db_session, self.event_id)
+            "unassigned": [rider.name for rider in get_unassigned(db_session, self.event_id)]
         }
 
 
@@ -94,7 +94,7 @@ class Rider(Based):
     __table_args__ = tuple(UniqueConstraint('event_id', 'name'))
 
 
-def get_unassigned(session, event_id: str) -> list[str]:
+def get_unassigned(session, event_id: str) -> list[Rider]:
 
     (
         session.query(Rider)
@@ -105,10 +105,10 @@ def get_unassigned(session, event_id: str) -> list[str]:
 
     # event = session.query(Event)
     event = session.query(Event).filter_by(event_id=event_id).one()
-    result: list[str] = list()
+    result: list[Rider] = list()
     for rider in event.riders:
         if rider.car is None:
-            result.append(rider.name)
+            result.append(rider)
     return result
 
 
@@ -131,9 +131,11 @@ def create_event(session, name: str) -> str:
 def read_event(session, event_id: str) -> Event:
     return session.query(Event).filter(Event.event_id == event_id).first()
 
+
 def person_in_event(session, event_id: str, person: str) -> bool:
     event: Event = read_event(session, event_id)
     return person in [rider.name for rider in event.riders] or person in [car.driver_name for car in event.cars]
+
 
 def update_event_name(session, event_id: str, name: str) -> bool:
     session.query(Event).filter_by(Event.event_id == event_id).first().name = name
@@ -146,6 +148,8 @@ def add_car_to_event(session, event_id: str, name: str, cap: int):
     evt: Event = read_event(session, event_id)
     car: Car = Car(event_id=evt.id, driver_name=name, capacity=cap)
     session.add(car)
+    session.commit()
+    add_unassigned_to_car(session, event_id)
     session.commit()
 
     # Events[event_id].cars.append(car)
@@ -160,6 +164,27 @@ def add_unassigned_to_event(session, event_id: str, name: str):
     rider: Rider = Rider(event_id=evt.id, car_id=None, name=name)
     session.add(rider)
     session.commit()
+    add_unassigned_to_car(session, event_id)
+    session.commit()
+
+
+def find_open_car(session, event_id: str) -> Car:
+    event: Event = read_event(session, event_id)
+    for car in event.cars:
+        if car.capacity > len(car.riders):
+            return car
+    return None
+
+
+def add_unassigned_to_car(session, event_id: str):
+    unassigned: list[Rider] = get_unassigned(session, event_id)
+    for person in unassigned:
+        # find open car
+        car: Car = find_open_car(session, event_id)
+        if car is not None:
+            person.car_id = car.id
+        else:
+            return
 
 
 def get_car_by_driver(session, event_id: str, driver: str) -> Car:
@@ -194,9 +219,11 @@ def delete_person(session, event_id: str, name: str):
         # person has to be a rider
         event: Event = read_event(session, event_id)
         rider: Rider = session.query(Rider).filter(Rider.event_id == event.id and Rider.name == name).first()
-        print("\n\n\n\n\n\n\n")
-        print(rider)
+        # print("\n\n\n\n\n\n\n")
+        # print(rider)
         session.delete(rider)
+        session.commit()
+        add_unassigned_to_car(session, event_id)
         session.commit()
         # session.execute(delete(Rider).filter(Rider.event_id == event_id and Rider.name == name))
     else:
@@ -205,7 +232,8 @@ def delete_person(session, event_id: str, name: str):
         # person is a driver
         session.delete(car)
         session.commit()
-
+        add_unassigned_to_car(session, event_id)
+        session.commit()
 
 
 def get_event_user_info(session, event_id: str, name: str):
@@ -242,9 +270,11 @@ def get_event_user_info(session, event_id: str, name: str):
 
     return None
 
+
 def init_database():
     Based.metadata.create_all(bind=Engine)
 
+
 if not os.path.exists("./rides.db"):
-    print("HHHHH")
+    # print("HHHHH")
     init_database()
