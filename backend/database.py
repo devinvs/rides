@@ -171,15 +171,17 @@ def get_car_by_driver(session, event_id: str, driver: str) -> Car:
     return None
 
 
-def assign_person_to_car(session, event_id: str, rider_name: str, driver_name: str):
+def assign_person_to_car(session, event_id: str, rider_name: str, driver_name: str) -> str:
     car = get_car_by_driver(session, event_id, driver_name)
-
+    if car is None:
+        return "not a driver"
     if car.capacity <= len(car.riders):
         add_unassigned_to_event(session, event_id, rider_name)
-        return
+        return "car is full"
     rider = Rider(event_id = car.event_id, name = rider_name, car_id = car.id)
     session.add(rider)
     session.commit()
+    return ""
 
 
 def delete_event(session, event_id: str) -> str:
