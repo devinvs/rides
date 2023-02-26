@@ -38,7 +38,7 @@ app.get('/events/:eventId', (req, res) => {
 
 app.get('/events/:eventId/persons', (req, res) => {
     console.log("Receive post for login")
-    // let name = req.query.;
+    let name = req.query.name;
     let riders =  ["Devin", "Mathew", "Justin"];
 
     res.json({

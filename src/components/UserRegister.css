@@ -1,0 +1,6 @@
+.show-ride, .show-drive, .join-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+}

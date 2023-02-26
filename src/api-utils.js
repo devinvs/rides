@@ -22,20 +22,40 @@ export async function createEvent(name) {
 
 // login
 export async function login(eventId, name) {
-    const data = { name: name };
     const res = await fetch(`${apiBase}/events/${eventId}/persons?name=${name}`, {
         method: "GET",
     });
 
-     return await res.json();
+    if (res.status == 404) {
+         throw new Error("User doesn't Exist");
+    }
+    
+    return await res.json();
 }
 
 // Join a car
-export async function joinCar(eventId, driverName) {
-    const data = { driver: driverName };
+export async function joinCar(eventId, rider, driver) {
+    const data = { rider: rider, driver: driver };
     const res = await fetch(`${apiBase}/events/${eventId}/riders`, {
         headers: {
             "Content-Type": "application/json"
+        },
+        method: "POST",
+        body: JSON.stringify(data),
+    });
+
+    return await res.json();
+}
+
+// Add a car to an event
+export async function addCarToEvent(eventId, driverName, capacity) {
+    const data = {
+        driver: driverName,
+        capacity: capacity
+    };
+    const res = await fetch(`${apiBase}/events/${eventId}/drivers`, {
+        headers: {
+            "Content-Type": "application/json",
         },
         method: "POST",
         body: JSON.stringify(data),

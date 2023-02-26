@@ -12,8 +12,18 @@ const getColor = (cap) => {
 }
 
 export function Car(props) {
-    const {car, setParentSelectedDriver, isRiderNameEntered, contWidth} = props;
-    const joinCar = () => setParentSelectedDriver(car.driver);
+    const {
+        eventId,
+        car,
+        contWidth,
+        setParentSelectedDriver,
+        isRiderNameEntered,
+        updateParentEvent
+    } = props;
+    const joinCar = () => {
+        setParentSelectedDriver(car.driver_name);
+        updateParentEvent(eventId);
+    };
 
     let seatsRemaining = car.capacity - car.riders.length;
 
@@ -45,7 +55,7 @@ export function Car(props) {
     const num_lines = Math.max(2, Math.floor(car.capacity/max_per_line));
     const num_per_line = Math.ceil(car.capacity / num_lines);
 
-    console.log(max_per_line)
+    // console.log(max_per_line)
 
     for (let i=0; i<num_lines; i++) {
         renderedSeats.push([]);
@@ -60,7 +70,7 @@ export function Car(props) {
 
     return (
         <div className="car">
-            <p className="driver">{car.driver}</p>
+            <p className="driver">{car.driver_name}</p>
             <div className={"riders " + color}>
                 <div className="wheel1" />
                 <div className="wheel2" />
