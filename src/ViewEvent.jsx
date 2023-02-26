@@ -12,7 +12,8 @@ export function ViewEventPage(_) {
     const [event, setEvent] = useState();
     const [rider, setRider] = useState("");
     const [driver, setDriver] = useState("");
-
+    const [autoLoginState, setAutoLoginState] = useState(false);
+    const [isJoinCarDisabled, setIsJoinCarDisabled] = useState(true);
     const [searchParams] = useSearchParams();
 
     let eventIdParam = searchParams.get("e");
@@ -31,12 +32,16 @@ export function ViewEventPage(_) {
     }, [eventIdParam]);
 
     useEffect(() => {
+        if (rider !== "") {
+            setIsJoinCarDisabled(false);
+        }
         if (rider!=="" && driver!=="" && event) {
             joinCar(eventIdParam, rider, driver)
                 .then(() => {
                     setDriver("");
                     setRider("");
                     fetchEventFromApi(eventIdParam);
+                    setAutoLoginState(true);
                 })
                 .catch(error => console.error(error));
         }
@@ -58,12 +63,16 @@ export function ViewEventPage(_) {
                             eventId={eventIdParam}
                             setParentRider={setRider}
                             updateParentEvent={fetchEventFromApi}
-                            />
+                            autoLoginState={autoLoginState}
+                            setAutoLoginState={setAutoLoginState}
+                            setIsJoinCarDisabled={setIsJoinCarDisabled}
+                        />
                         <DisplayEvent
                             event={event}
                             eventId={eventIdParam}
                             setParentDriver={setDriver}
-                            isRiderNameEntered={rider != ""}
+                            isJoinCarDisabled={isJoinCarDisabled}
+                            setIsJoinCarDisabled={setIsJoinCarDisabled}
                             updateParentEvent={fetchEventFromApi}
                         />
                     </div>

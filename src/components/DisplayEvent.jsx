@@ -11,7 +11,8 @@ export function DisplayEvent(props) {
         event,
         eventId,
         setParentDriver,
-        isRiderNameEntered,
+        isJoinCarDisabled,
+        setIsJoinCarDisabled,
         updateParentEvent
     } = props;
 
@@ -32,7 +33,8 @@ export function DisplayEvent(props) {
                         car={car}
                         contWidth={contWidth}
                         setParentSelectedDriver={setParentDriver}
-                        isRiderNameEntered={isRiderNameEntered}
+                        isJoinCarDisabled={isJoinCarDisabled}
+                        setIsJoinCarDisabled={setIsJoinCarDisabled}
                         updateParentEvent={updateParentEvent}
                     />
                 </>

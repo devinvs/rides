@@ -1,6 +1,6 @@
 import "./UserRegister.css";
 
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import { login, addCarToEvent } from "../api-utils";
 const nameRE = new RegExp("[\\w' ]+");
 
@@ -14,7 +14,22 @@ const State = {
 };
 
 export function UserRegister(props) {
-    const {eventId, setParentRider, updateParentEvent} = props;
+    const {
+        eventId, 
+        setParentRider, 
+        updateParentEvent,
+        autoLoginState,
+        setAutoLoginState,
+        setIsJoinCarDisabled
+    } = props;
+
+    useEffect(() => {
+        if (autoLoginState){
+            startLoginWorkflow();
+            setAutoLoginState(false);
+            setIsJoinCarDisabled(true);
+        }
+    }, [autoLoginState, setAutoLoginState])
 
     const [name, setName] = useState("");
     const [capacity, setCapacity] = useState();
@@ -56,7 +71,7 @@ export function UserRegister(props) {
         if (!validateName(name)) {
             return
         }
-
+        setIsJoinCarDisabled(true);
         setUiState(State.Seats);
     }
 
@@ -66,22 +81,16 @@ export function UserRegister(props) {
         addCarToEvent(eventId, name, capacity)
             .then(() => {
                 updateParentEvent(eventId);
+                startLoginWorkflow(event);
             })
             .catch(error => console.error(error));
-
-        setUiState(State.Login);
-    }
-
-    const startRiderWorkflow = () => {
-        if (!validateName(name)) {
-            return
-        }
-
-        setUiState(State.ShowRide);
     }
 
     const startLoginWorkflow = (event) => {
-        event.preventDefault();
+        if (event){
+            event.preventDefault();
+        }
+        
         if (!validateName(name)) {
             return
         }

@@ -17,7 +17,8 @@ export function Car(props) {
         car,
         contWidth,
         setParentSelectedDriver,
-        isRiderNameEntered,
+        isJoinCarDisabled,
+        setIsJoinCarDisabled,
         updateParentEvent
     } = props;
     const joinCar = () => {
@@ -40,7 +41,7 @@ export function Car(props) {
             <button
                 className="empty-seat"
                 onClick={joinCar}
-                disabled={!isRiderNameEntered}
+                disabled={isJoinCarDisabled}
             >
                 Join
             </button>
