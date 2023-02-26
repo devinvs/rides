@@ -1,0 +1,27 @@
+.display-event {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    width: 100%;
+}
+
+.parking-lot {
+    padding: 20px;
+    padding-right: 0;
+
+    background-color: #333;
+    height: 100%;
+    margin-left: 100px;
+
+    border-radius: 24px 0 0 0;
+    height: 100%;
+}
+
+.parking-line {
+    height: 10px;
+    background-color: #e2c154;
+    width: 70%;
+
+    border-radius: 4px 0 0 4px;
+    margin-left: auto;
+}

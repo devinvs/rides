@@ -1,0 +1,22 @@
+.view-event-page {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 100vh;
+    flex-flow: column;
+}
+
+.banner {
+    width: 100vw;
+    height: 15vh;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    padding-left: 24px;
+    padding-top: 60px;
+}
+
+
