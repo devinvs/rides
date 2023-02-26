@@ -1,11 +1,6 @@
 .car {
     display: grid;
     grid-template-columns: 80px auto;
-    /* margin: 1em; */
-    
-    /* padding: 2em; */
-    /* padding-top: 0;
-    padding-bottom: 0; */
 }
 
 .driver {
@@ -14,30 +9,24 @@
     font-size: 1em;
 }
 
-.car li {
+/* .car li {
     margin: 2.5px;
     margin-left: 5px;
     list-style: none;
     border-radius: 5px;
-}
-
-.car li:first-child {
-    margin-top: 5px;
-}
-
-.car li:last-child {
-    margin-bottom: 5px;
-}
+} */
 
 .riders {
-    display: grid;
+    /* display: flex;
     padding: 4px;
-    /* grid-auto-flow:column dense;
-    grid-template-rows:auto auto; */
-    /* gap: 10px; */
+    flex-wrap: wrap;
+    align-items: flex-start; */
     background-color: #dad0b2;
     border-radius: 0.5em;
+    list-style: none;
 }
+
+
 .rider{
     display: block;
     background-color: #722a2b;
@@ -48,7 +37,7 @@
     color: white;
 }
 
-.empty-seat button {
+.empty-seat {
     display: block;
     width: 50px;
     height: 50px;
@@ -59,7 +48,7 @@
     background-color: white;
 }
 
-.empty-seat button:hover {
+.empty-seat hover {
     background-color: #bb5355;
     color: white;
 }

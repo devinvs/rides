@@ -9,18 +9,31 @@ app.get('/events/:eventId', (req, res) => {
     console.log("Get events for ", req.params.eventId);
 
     res.json({
-        name: "The Best Event",
-        cars: [{
+      name: "The Best Event",
+      cars: [
+        {
             capacity: 4,
             riders: ["Devin", "Mathew", "Justin"],
             driver: "Nicholas"
-        }, {
-            capacity: 4,
+        },
+        {
+            capacity: 3,
             riders: ["Bob"],
             driver: "Joe"
-        }],
-        unassigned: ["Frank", "John"]
-    })
+        },
+        {
+            capacity: 14,
+            riders: ["David"],
+            driver: "Frankie"
+        },
+        {
+            capacity: 6,
+            riders: ["Taylor"],
+            driver: "Justin"
+        },
+      ],
+      unassigned: ["Frank", "John"],
+    });
 })
 
 app.post('/events', (_, res) => {
