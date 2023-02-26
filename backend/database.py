@@ -72,7 +72,6 @@ class Car(Based):
     capacity = Column(Integer, unique=False, primary_key=False, nullable=False)
     riders = relationship("Rider",
                           backref=backref("car", lazy="joined"),
-                          cascade="all,delete",
                           lazy="joined",
                           uselist=True)
 
@@ -90,7 +89,7 @@ class Rider(Based):
     __tablename__ = "based_riders"
     id = Column(Integer, primary_key=True)
     event_id = Column(Integer, ForeignKey("based_events.id"), nullable=False)
-    car_id = Column(Integer, ForeignKey("based_cars.id"))
+    car_id = Column(Integer, ForeignKey("based_cars.id"), )
     name = Column(String, nullable=False)
     __table_args__ = tuple(UniqueConstraint('event_id', 'name'))
 
@@ -193,14 +192,19 @@ def delete_person(session, event_id: str, name: str):
     car = get_car_by_driver(session, event_id, name)
     if car is None:
         # person has to be a rider
-        session.delete()
+        event: Event = read_event(session, event_id)
+        rider: Rider = session.query(Rider).filter(Rider.event_id == event.id and Rider.name == name).first()
+        print("\n\n\n\n\n\n\n")
+        print(rider)
+        session.delete(rider)
+        session.commit()
+        # session.execute(delete(Rider).filter(Rider.event_id == event_id and Rider.name == name))
     else:
+        # event: Event = read_event(session, event_id)
+        # session.execute(delete(Car).filter(Car.driver_name == name and Car.event_id == event.id))
         # person is a driver
-        for rider in car.riders:
-            car.riders.pop(rider)
-            add_unassigned_to_event(session, event_id, rider.name)
         session.delete(car)
-    session.commit()
+        session.commit()
 
 
 

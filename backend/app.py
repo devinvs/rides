@@ -45,18 +45,15 @@ def post_event():
 
 @app.route("/events/<event_id>/drivers", methods=["POST"])
 def post_driver(event_id: str):
-    if request.method != "POST":
-        return "Hmmm, susy. You tried to GET a POST end point...", 400
-
     event: Event = database.read_event(session, event_id)
     if event is None:
         return {"error": "event does not exist"}, 400
 
     name = request.json.get("driver")
-    cap = int(request.json.get("capacity"))
-
     if name is None or len(name) == 0:
         return {"error": "driver name is not provided"}, 400
+
+    cap = int(request.json.get("capacity"))
 
     if cap == 0:
         return {"error": "Wow, cool... you can drive yourself... good for you..."}, 400
@@ -70,11 +67,46 @@ def post_driver(event_id: str):
     return {"success": True}, 200
 
 
+
+@app.route("/events/<event_id>/drivers/<name>", methods=["DELETE"])
+def delete_driver(event_id: str, name: str):
+    event: Event = database.read_event(session, event_id)
+    if event is None:
+        return {"error": "event does not exist"}, 400
+    if name is None or len(name) == 0:
+        return {"error": "driver name is not provided"}, 400
+    if not database.person_in_event(session, event_id, name):
+        return {"error": "driver not in event"}, 400
+
+    database.delete_person(session, event_id, name)
+    return {"success": True}, 200
+
 @app.route("/events/<event_id>/riders", methods=["POST"])
 def post_rider(event_id: str):
     if request.method != "POST":
         return "Hmmm, susy. You tried to GET a POST end point...", 400
 
+    if database.read_event(session, event_id) is None:
+        return {"error": "event does not exist"}, 400
+
+    rider: str = request.json.get("rider")
+    if rider is None or len(rider) == 0:
+        return {"error": "please enter a name to sign up"}, 400
+
+    if database.person_in_event(session, event_id, rider):
+        return {"error": "name already taken"}, 400
+
+    driver: str = request.json.get("driver")
+    if driver is None or len(driver) == 0:
+        return {"error": "driver is not provided"}, 400
+
+    result = database.assign_person_to_car(session, event_id, rider, driver)
+    if len(result) != 0:
+        return {"error": result}, 400
+    return {"success": True}, 200
+
+@app.route("/events/<event_id>/riders/<name>", methods=["DELETE"])
+def delete_rider(event_id: str, name: str):
     if database.read_event(session, event_id) is None:
         return {"error": "event does not exist"}, 400
 
@@ -116,16 +148,17 @@ def delete_event(event_id: str):
     if database.read_event(session, event_id) is None:
         return "Invalid event_id: event does not exist", 400
 
-    database.delete_event(event_id)
-    return {"sucess": True}, 200
+    database.delete_event(session, event_id)
+    return {"success": True}, 200
 
 
-@app.route("/events/<event_id>/persons", methods=["DELETE"])
+@app.route("/events/<event_id>/persons/<name>", methods=["DELETE"])
 def delete_person(event_id: str, name):
     if database.read_event(session, event_id) is None:
         return {"error": "event does not exist"}, 400
 
-    if not database.person_in_event(session, event_id, request.json.get("rider")):
+    if not database.person_in_event(session, event_id, name):
         return {"error": "cannot delete a nonexistent person"}, 400
 
     database.delete_person(session, event_id, name)
+    return {"success": True}, 200
