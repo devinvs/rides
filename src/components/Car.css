@@ -1,11 +1,11 @@
 .car {
-    background-color: #dad0b2;
-    display: flex;
-    margin: 1em;
-    border-radius: 0.5em;
-    padding: 2em;
-    padding-top: 0;
-    padding-bottom: 0;
+    display: grid;
+    grid-template-columns: 80px auto;
+    /* margin: 1em; */
+    
+    /* padding: 2em; */
+    /* padding-top: 0;
+    padding-bottom: 0; */
 }
 
 .driver {
@@ -14,25 +14,33 @@
     font-size: 1em;
 }
 
-.car ul {
-    display: grid;
-    grid-auto-flow:column dense; /* column flow with "dense" to fill all the cells */
-    grid-template-rows:auto auto; /* 2 rows */
-    gap: 10px;
-}
-
 .car li {
-    margin: 10px;
+    margin: 2.5px;
+    margin-left: 5px;
     list-style: none;
     border-radius: 5px;
 }
 
+.car li:first-child {
+    margin-top: 5px;
+}
+
+.car li:last-child {
+    margin-bottom: 5px;
+}
+
 .riders {
-    display: flex;
+    display: grid;
+    padding: 4px;
+    /* grid-auto-flow:column dense;
+    grid-template-rows:auto auto; */
+    /* gap: 10px; */
+    background-color: #dad0b2;
+    border-radius: 0.5em;
 }
 .rider{
     display: block;
-    background-color: #913537;
+    background-color: #722a2b;
     text-align: center;
     width: 50px;
     height: 50px;
