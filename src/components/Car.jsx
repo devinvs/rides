@@ -1,5 +1,5 @@
 import { abbreviate } from "../util";
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import "./Car.css";
 
 const colors = ["red", "blue", "green", "purple", "orange"]
@@ -12,14 +12,12 @@ const getColor = (cap) => {
 }
 
 export function Car(props) {
-    const {car, setParentSelectedDriver, isRiderNameEntered} = props;
+    const {car, setParentSelectedDriver, isRiderNameEntered, contWidth} = props;
     const joinCar = () => setParentSelectedDriver(car.driver);
 
     let seatsRemaining = car.capacity - car.riders.length;
 
     const [color, _] = useState(getColor(car.capacity));
-
-    let contWidth = props.contWidth;
 
     let seats = [];
 
@@ -41,10 +39,13 @@ export function Car(props) {
 
     let renderedSeats = [];
 
+    const offset = 200;
     const blockWidth = 55;
-    const max_per_line = Math.floor(contWidth/ blockWidth);
+    const max_per_line = Math.floor((Math.min(contWidth, window.screen.width)-offset) / blockWidth);
     const num_lines = Math.max(2, Math.floor(car.capacity/max_per_line));
     const num_per_line = Math.ceil(car.capacity / num_lines);
+
+    console.log(max_per_line)
 
     for (let i=0; i<num_lines; i++) {
         renderedSeats.push([]);
@@ -55,7 +56,6 @@ export function Car(props) {
 
             renderedSeats[i].push(seats[num]);
         }
-        renderedSeats[i].reverse();
     }
 
     return (

@@ -26,7 +26,6 @@ export function CreateEventPage(_) {
         createEvent(name)
             .then(res => {
                 // On success we redirect to the appropriate page for their event
-                console.log(res);
                 const url = `/events?e=${res.id}`
                 navigate(url);
             })
