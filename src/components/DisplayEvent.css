@@ -1,4 +1,20 @@
 .display-event {
     display: grid;
     grid-template-columns: 1fr 2fr;
+    width: 100%;
+}
+
+.parking-lot {
+    padding: 20px;
+    padding-right: 0;
+}
+
+.parking-line {
+    position: absolute;
+
+    height: 10px;
+    background-color: yellow;
+    width: 40%;
+
+    right: 0;
 }
