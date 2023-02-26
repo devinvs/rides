@@ -2,8 +2,14 @@ from flask import Flask, request
 import database
 
 from database import Car, Event
+from database import db_session as session
 
 app = Flask(__name__)
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    from database import DB_Session
+    db_session.remove()
 
 @app.route("/")
 def main_page():
