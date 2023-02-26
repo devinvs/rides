@@ -96,7 +96,7 @@ def post_rider(event_id: str):
     driver: str = request.json.get("driver")
     if driver is None:
         database.add_unassigned_to_event(session, event_id, rider)
-        return {"success": True}, 400
+        return {"success": True}, 200
 
     if len(driver) == 0:
         return {"error": "driver is not provided"}, 400

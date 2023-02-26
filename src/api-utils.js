@@ -63,3 +63,9 @@ export async function addCarToEvent(eventId, driverName, capacity) {
 
     return await res.json();
 }
+
+export async function deletePerson(eventId, name) {
+    await fetch(`${apiBase}/events/${eventId}/persons/${encodeURI(name)}`, {
+        method: "DELETE",
+    });
+}

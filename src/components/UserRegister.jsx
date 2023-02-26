@@ -1,7 +1,7 @@
 import "./UserRegister.css";
 
 import {useEffect, useState} from 'react';
-import { login, addCarToEvent } from "../api-utils";
+import { login, addCarToEvent, deletePerson } from "../api-utils";
 const nameRE = new RegExp("[\\w' ]+");
 
 const State = {
@@ -120,6 +120,16 @@ export function UserRegister(props) {
         )
     }
 
+    const deleteMe = () => {
+        deletePerson(eventId, name)
+            .then(() => {
+                updateParentEvent(eventId);
+                setName("");
+                setUiState(State.Login);
+            })
+    }
+
+
     switch (uiState) {
         case State.Login:
             return (
@@ -166,7 +176,8 @@ export function UserRegister(props) {
         case State.ShowDrive:
             return (
                 <div className="show-drive">
-                    <h2>Your Driver Is {driver}</h2>
+                    <h2>Your Driver Is {driver===""? "Unassigned": driver}</h2>
+                    <input type="submit" value="I don't need a ride" onClick={deleteMe}/>
                 </div>
             );
         case State.ShowRide:
@@ -178,6 +189,7 @@ export function UserRegister(props) {
                             riders.map(rider => <h3>{rider}</h3>)
                         }
                     </ul>
+                    <input type="submit" value="I'm not driving anymore" onClick={deleteMe}/>
                 </div>
             );
         default:
