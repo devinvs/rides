@@ -14,7 +14,8 @@ from sqlalchemy import (
     delete,
     insert,
     func,
-    exists
+    exists,
+    UniqueConstraint
 )
 from sqlalchemy.orm import (
     declarative_base,
@@ -35,9 +36,15 @@ db_session = scoped_session(sessionmaker(
 ))
 
 
+def init_database():
+    Based.metadata.create_all(bind=Engine)
+
+
 class Event(Based):
     __tablename__ = "based_events"
+    # incrementing number
     id = Column(Integer, primary_key=True)
+    # url hash string
     event_id = Column(String, unique=True, nullable=False)
     name = Column(String, nullable=False)
     cars = relationship("Car",
@@ -54,8 +61,8 @@ class Event(Based):
     def json(self):
         return {
             "id": self.event_id,
-            "cars": [car.json for car in self.cars],
-            "unassigned": get_unassigned(self.event_id)
+            "cars": [car.json() for car in self.cars],
+            "unassigned": get_unassigned(db_session, self.event_id)
         }
 
 
@@ -70,19 +77,15 @@ class Car(Based):
                           cascade="all,delete",
                           lazy="joined",
                           uselist=True)
-    kicked = relationship("Rider",
-                          backref=backref("kicked_cars", lazy="joined"),
-                          cascade="all,delete",
-                          lazy="joined",
-                          uselist=True)
 
     def json(self):
         return {
             "driver_name": self.driver_name,
             "capacity": self.capacity,
             "riders": [rider.name for rider in self.riders],
-            "kicked": [rider.name for rider in self.kicked],
         }
+
+    __table_args__ = tuple(UniqueConstraint('event_id', 'id', 'driver_name'))
 
 
 class Rider(Based):
@@ -91,9 +94,11 @@ class Rider(Based):
     event_id = Column(Integer, ForeignKey("based_events.id"), nullable=False)
     car_id = Column(Integer, ForeignKey("based_cars.id"))
     name = Column(String, nullable=False)
+    __table_args__ = tuple(UniqueConstraint('event_id', 'name'))
 
 
 def get_unassigned(session, event_id: str) -> list[str]:
+
     (
         session.query(Rider)
             .join(Event)
@@ -101,8 +106,8 @@ def get_unassigned(session, event_id: str) -> list[str]:
             .filter(Rider.car_id is None)
     )
 
-    event = session.query(Event)
-    event = session.scalars(select(Event).where(event_id=event_id)).one()
+    # event = session.query(Event)
+    event = session.query(Event).filter_by(event_id=event_id).one()
     result: list[str] = list()
     for rider in event.riders:
         if rider.car is None:
@@ -115,7 +120,7 @@ def create_event(session, name: str) -> str:
     # create a random id string
     random_bytes: bytes = random.randbytes(11)
     event_id: str = base64.urlsafe_b64encode(random_bytes).decode('utf-8')
-    while session.query(Event).filter_by(event_id=event_id).first() is None:
+    while session.query(exists().where(Event.event_id == event_id)).scalar():
         random_bytes: bytes = random.randbytes(11)
         event_id = base64.urlsafe_b64encode(random_bytes).decode('utf-8')
 
@@ -127,26 +132,7 @@ def create_event(session, name: str) -> str:
 
 
 def read_event(session, event_id: str) -> Event:
-    
-    event_found: Event = session.scalars(select(Event).where(event_id=event_id)).one()
-    
-    return event_found
-
-    # return select("event").where(engine.events.event_id == event_id)
-
-
-# def update_event(event_id: str, name: str, cars: list[Car], unassigned: list[str]):
-#     
-#     event_id = session.execute(select(Event).where(event_id=event_id))
-#     if event_id:
-#         # update
-#         session.
-#     else:
-#         # create
-#         create_event(name)
-#     Events[event_id].event_name = name
-#     Events[event_id].cars = cars
-#     Events[event_id].unassigned = unassigned
+    return session.query(Event).filter(Event.event_id == event_id).first()
 
 
 def update_event_name(session, event_id: str, name: str) -> bool:
@@ -156,63 +142,45 @@ def update_event_name(session, event_id: str, name: str) -> bool:
     return True
 
 
-def add_car_to_event(session, event_id: str, car: Car) -> Event:
-    event = session.execute(select(Event).where(event_id=event_id))
-    session.execute(event.cars.append(car))
+def add_car_to_event(session, event_id: str, name: str, cap: int):
+    evt: Event = read_event(session, event_id)
+    car: Car = Car(event_id=evt.id, driver_name=name, capacity=cap)
+    session.add(car)
     session.commit()
-    return event
 
     # Events[event_id].cars.append(car)
     # return Events[event_id]
 
 
-def add_unassigned_to_event(session, event_id: str, name: str) -> bool:
-    # Events[event_id].unassigned.append(unassigned)
-    
-    session.query(exists().where(Event.c.event_id == event_id)).riders.append(name)
+def add_unassigned_to_event(session, event_id: str, name: str):
+    evt: Event = read_event(session, event_id)
+    rider: Rider = Rider(event_id=evt.id, car_id=None, name=name)
+    session.add(rider)
     session.commit()
-    
-    return True
 
 
 def get_car_by_driver(session, event_id: str, driver: str) -> Car:
-    car_list: list[Car] = session.query(exists().where(Event.c.event_id == event_id)).cars
+    car_list: list[Car] = session.query(Car).filter(Event.event_id == event_id).all()
     for car in car_list:
         if car.driver_name == driver:
             return car
     return None
 
 
-def assign_person_to_car(session, event_id: str, rider_name: str, driver_name: str) -> str:
-    
-    car: Car = get_car_by_driver(event_id, driver_name)
-    session.query(exists().where(Event.c.event_id == event_id and Car == car)).riders.append(rider_name)
+def assign_person_to_car(session, event_id: str, rider_name: str, driver_name: str):
+    car = get_car_by_driver(session, event_id, driver_name)
+
+    if car.capacity <= len(car.riders) + 1:
+        add_unassigned_to_event(session, event_id, rider_name)
+        return
+    rider = Rider(event_id = car.event_id, name = rider_name, car_id = car.id)
+    session.add(rider)
     session.commit()
-    
-    return ""
-    # for car in Events[event_id].cars:
-    #     if car.capacity > car.riders.len():
-    #         car.riders.append(name)
-    #         # return the driver that name was assigned to
-    #         return car.driver
-    #
-    # return ""
-
-
-def check_if_person_exists(session, event_id: str, name: str) -> bool:
-    
-    person_exists: bool = session.query(exists().where(Event.c.event_id == event_id and Event.c.riders.name == name)).scalar()
-    
-
-    return person_exists
-
-
-def gather_person_info(session, event_id: str, name: str) -> dict[str, any]:
-    event = session.query(Car.driver_name, Car.riders).select_from(Car).join(Car.events).where(Event.event_id==event_id)
 
 
 def delete_event(session, event_id: str) -> str:
     session.delete(event_id)
+    session.commit()
 
 
 def get_event_user_info(session, event_id: str, name: str):
@@ -223,13 +191,14 @@ def get_event_user_info(session, event_id: str, name: str):
             .filter(Rider.name == name)
             .first()
     )
+
     if rider is not None:
         if rider.car is None:
             return None
 
         return {
-            "is_driver": False,
-            "riders": rider.car.riders
+            "driver": rider.car.driver_name,
+            "riders": [r.name for r in rider.car.riders]
         }
 
     driver: Car = (
@@ -237,12 +206,13 @@ def get_event_user_info(session, event_id: str, name: str):
             .join(Event)
             .filter(Event.event_id == event_id)
             .filter(Car.driver_name == name)
+            .first()
     )
 
     if driver is not None:
         return {
-            "is_driver": True,
-            "riders": driver.riders
+            "driver": driver.driver_name,
+            "riders": [r.name for r in driver.riders]
         }
 
     return None
