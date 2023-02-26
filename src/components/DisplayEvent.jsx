@@ -7,7 +7,14 @@ const Line = () => {
 }
 
 export function DisplayEvent(props) {
-    let {event, setParentDriver, isRiderNameEntered} = props;
+    const {
+        event,
+        eventId,
+        setParentDriver,
+        isJoinCarDisabled,
+        setIsJoinCarDisabled,
+        updateParentEvent
+    } = props;
 
     const contRef = useRef(null);
     const [contWidth, setContWidth] = useState(100);
@@ -22,14 +29,22 @@ export function DisplayEvent(props) {
                 <>
                 <Line />
                     <Car
+                        eventId={eventId}
                         car={car}
                         contWidth={contWidth}
                         setParentSelectedDriver={setParentDriver}
-                        isRiderNameEntered={isRiderNameEntered}
+                        isJoinCarDisabled={isJoinCarDisabled}
+                        setIsJoinCarDisabled={setIsJoinCarDisabled}
+                        updateParentEvent={updateParentEvent}
                     />
                 </>
             )}
             <Line />
+            {event.cars.length===0?
+                <>
+                    <div style={{height: "170px"}} />
+                    <Line />
+                    </>: null}
         </div>
     )
 };

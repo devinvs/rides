@@ -10,7 +10,6 @@
     padding-right: 0;
 
     background-color: #333;
-    height: 100%;
     margin-left: 100px;
 
     border-radius: 24px 0 0 0;
@@ -25,3 +24,14 @@
     border-radius: 4px 0 0 4px;
     margin-left: auto;
 }
+
+@media only screen and (max-width: 800px) {
+    .display-event {
+        grid-template-columns: 1fr;
+    }
+
+    .parking-lot {
+        margin-left: 20px;
+    }
+}
+

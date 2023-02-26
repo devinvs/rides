@@ -12,7 +12,8 @@ export function ViewEventPage(_) {
     const [event, setEvent] = useState();
     const [rider, setRider] = useState("");
     const [driver, setDriver] = useState("");
-
+    const [autoLoginState, setAutoLoginState] = useState(false);
+    const [isJoinCarDisabled, setIsJoinCarDisabled] = useState(true);
     const [searchParams] = useSearchParams();
 
     let eventIdParam = searchParams.get("e");
@@ -20,7 +21,7 @@ export function ViewEventPage(_) {
 
     const fetchEventFromApi = (eventId) => {
         getEvent(eventId)
-            .then(fectchedEvent => {console.log(fectchedEvent);setEvent(fectchedEvent)})
+            .then(fectchedEvent => setEvent(fectchedEvent))
             .catch(error => console.error(error));
     };
 
@@ -31,15 +32,24 @@ export function ViewEventPage(_) {
     }, [eventIdParam]);
 
     useEffect(() => {
-        if (rider && driver && event) {
-            joinCar(eventIdParam, driver).catch(error => console.error(error));
-            fetchEventFromApi(eventIdParam);
+        if (rider !== "") {
+            setIsJoinCarDisabled(false);
+        }
+        if (rider!=="" && driver!=="" && event) {
+            joinCar(eventIdParam, rider, driver)
+                .then(() => {
+                    setDriver("");
+                    setRider("");
+                    fetchEventFromApi(eventIdParam);
+                    setAutoLoginState(true);
+                })
+                .catch(error => console.error(error));
         }
     }, [rider, driver])
 
-    // console.log(event);
-    // console.log(`driver: ${driver}`);
-    // console.log(`rider: ${rider}`);
+    console.log(event);
+    console.log(`driver: ${driver}`);
+    console.log(`rider: ${rider}`);
 
   return (
         <>
@@ -49,11 +59,21 @@ export function ViewEventPage(_) {
                         <p>Invite Friends: <a href={invite_url}>{invite_url}</a></p>
                     </div>
                     <div className="display-event">
-                        <UserRegister eventId={eventIdParam} setParentRider={setRider} />
+                        <UserRegister
+                            eventId={eventIdParam}
+                            setParentRider={setRider}
+                            updateParentEvent={fetchEventFromApi}
+                            autoLoginState={autoLoginState}
+                            setAutoLoginState={setAutoLoginState}
+                            setIsJoinCarDisabled={setIsJoinCarDisabled}
+                        />
                         <DisplayEvent
                             event={event}
+                            eventId={eventIdParam}
                             setParentDriver={setDriver}
-                            isRiderNameEntered={rider != ""}
+                            isJoinCarDisabled={isJoinCarDisabled}
+                            setIsJoinCarDisabled={setIsJoinCarDisabled}
+                            updateParentEvent={fetchEventFromApi}
                         />
                     </div>
                 </div>

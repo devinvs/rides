@@ -5,9 +5,6 @@ import database
 from database import Car, Event
 from database import db_session as session
 
-
-
-
 app = Flask(__name__)
 CORS(app)
 

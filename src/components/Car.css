@@ -15,8 +15,8 @@
     background-color: #dad0b2;
     border-radius: 0.5em;
     list-style: none;
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin-top: 12px;
+    margin-bottom: 12px;
     padding: 10px;
     margin-right: 24px;
     width: fit-content;
@@ -27,6 +27,7 @@
 
 .rider-row {
     display: flex;
+    flex-direction: row-reverse;
 }
 
 .rider{
@@ -57,6 +58,11 @@
 .empty-seat hover {
     background-color: #bb5355;
     color: white;
+}
+
+.empty-seat:disabled {
+    color: #aaa;
+    border: none;
 }
 
 .wheel1, .wheel2, .wheel3, .wheel4 {
@@ -98,4 +104,17 @@
 }
 .black {
     background-color: #202224;
+}
+
+@media only screen and (max-width: 800px) {
+    .riders {
+        padding: 10px;
+        margin-right: 10px;
+        padding-right: 30px;
+        padding-left: 10px;
+    }
+
+    .driver {
+        width: 30px;
+    }
 }

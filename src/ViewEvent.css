@@ -3,6 +3,7 @@
     flex-wrap: wrap;
     min-height: 100vh;
     flex-flow: column;
+    overflow-x: hidden;
 }
 
 .banner {
@@ -15,8 +16,24 @@
 form {
     display: flex;
     flex-direction: column;
+    align-items: center;
     padding-left: 24px;
     padding-top: 60px;
 }
 
 
+@media only screen and (max-width: 800px) {
+    .banner a {
+        font-size: 1.0rem;
+        white-space: nowrap;
+    }
+
+    .banner {
+        height: 10vh;
+    }
+
+    form {
+        padding-top: 0px;
+        height: min-content;
+    }
+}
