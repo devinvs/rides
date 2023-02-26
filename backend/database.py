@@ -62,7 +62,7 @@ class Event(Based):
 class Car(Based):
     __tablename__ = "based_cars"
     id = Column(Integer, primary_key=True)
-    # event_id = Column(String, unique=True, primary_key=False, nullable=False)
+    event_id = Column(Integer, ForeignKey("based_events.id"), nullable=False)
     driver_name = Column(String, unique=True, primary_key=False, nullable=False)
     capacity = Column(Integer, unique=False, primary_key=False, nullable=False)
     riders = relationship("Rider",
@@ -71,7 +71,7 @@ class Car(Based):
                           lazy="joined",
                           uselist=True)
     kicked = relationship("Rider",
-                          backref=backref("car", lazy="joined"),
+                          backref=backref("kicked_cars", lazy="joined"),
                           cascade="all,delete",
                           lazy="joined",
                           uselist=True)
@@ -88,6 +88,8 @@ class Car(Based):
 class Rider(Based):
     __tablename__ = "based_riders"
     id = Column(Integer, primary_key=True)
+    event_id = Column(Integer, ForeignKey("based_events.id"), nullable=False)
+    car_id = Column(Integer, ForeignKey("based_cars.id"))
     name = Column(String, nullable=False)
 
 
@@ -112,7 +114,6 @@ def create_event(session, name: str) -> str:
     session.add(Event(event_id=event_id, name=name))
     # commit is done when not a select
     session.commit()
-    
 
     return event_id
 
@@ -140,8 +141,7 @@ def read_event(session, event_id: str) -> Event:
 #     Events[event_id].unassigned = unassigned
 
 
-def update_event_name(event_id: str, name: str) -> bool:
-    session = DB_Session()
+def update_event_name(session, event_id: str, name: str) -> bool:
     session.query(Event).filter_by(Event.event_id == event_id).first().name = name
 
     session.commit()
@@ -151,7 +151,7 @@ def update_event_name(event_id: str, name: str) -> bool:
 def add_car_to_event(session, event_id: str, car: Car) -> Event:
     event = session.execute(select(Event).where(event_id=event_id))
     session.execute(event.cars.append(car))
-
+    session.commit()
     return event
 
     # Events[event_id].cars.append(car)
@@ -159,7 +159,7 @@ def add_car_to_event(session, event_id: str, car: Car) -> Event:
 
 
 def add_unassigned_to_event(session, event_id: str, name: str) -> bool:
-    #Events[event_id].unassigned.append(unassigned)
+    # Events[event_id].unassigned.append(unassigned)
     
     session.query(exists().where(Event.c.event_id == event_id)).riders.append(name)
     session.commit()
@@ -168,7 +168,6 @@ def add_unassigned_to_event(session, event_id: str, name: str) -> bool:
 
 
 def get_car_by_driver(session, event_id: str, driver: str) -> Car:
-    session = DB_Session
     car_list: list[Car] = session.query(exists().where(Event.c.event_id == event_id)).cars
     for car in car_list:
         if car.driver_name == driver:

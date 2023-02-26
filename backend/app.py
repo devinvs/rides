@@ -8,8 +8,9 @@ app = Flask(__name__)
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
-    from database import DB_Session
+    from database import db_session
     db_session.remove()
+
 
 @app.route("/")
 def main_page():
@@ -26,7 +27,7 @@ def get_event_id(event_id: str):
 def post_event():
     if request.method != "POST":
         return "Look at you, you little sussy wussy baka"
-    event_id: str = database.create_event(request.json.get("event_name"))
+    event_id: str = database.create_event(session, request.json.get("event_name"))
     return {
         "id": event_id,
     }
