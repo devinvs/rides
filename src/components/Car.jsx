@@ -12,7 +12,9 @@ const getColor = (cap) => {
 }
 
 export function Car(props) {
-    let car = props.car;
+    const {car, setParentSelectedDriver, isRiderNameEntered} = props;
+    const joinCar = () => setParentSelectedDriver(car.driver);
+
     let seatsRemaining = car.capacity - car.riders.length;
 
     const [color, _] = useState(getColor(car.capacity));
@@ -26,7 +28,15 @@ export function Car(props) {
     ));
 
     for (let i = 0; i < seatsRemaining; i++) {
-        seats.push(<button className="empty-seat">Join</button>);
+        seats.push(
+            <button
+                className="empty-seat"
+                onClick={joinCar}
+                disabled={!isRiderNameEntered}
+            >
+                Join
+            </button>
+        );
     }
 
     let renderedSeats = [];

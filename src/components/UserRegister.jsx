@@ -13,7 +13,7 @@ const State = {
 };
 
 export function UserRegister(props) {
-    const {eventId} = props;
+    const {eventId, setParentRider} = props;
 
     const [name, setName] = useState("");
     const [error, setError] = useState("");
@@ -21,6 +21,7 @@ export function UserRegister(props) {
 
     const onNameChange = (e) => {
         setName(e.target.value);
+        setParentRider(e.target.value);
     }
 
     const validateName = (name) => {
@@ -41,8 +42,15 @@ export function UserRegister(props) {
         if (!validateName(name)) {
             return
         }
-
         setUiState(State.Seats);
+    }
+    
+    const startRiderWorkflow = () => {
+        if (!validateName(name)) {
+            return
+        }
+        
+        setUiState(State.ShowRide);
     }
 
     switch(uiState) {
@@ -51,7 +59,7 @@ export function UserRegister(props) {
                 <form>
                     <input type="text" placeholder="Enter name" value={name} onChange={onNameChange}/>
                     <div>
-                        <input type="submit" value="I need a ride" onClick={startDriverWorkflow}/>
+                        {/* <input type="submit" value="I need a ride" onClick={startDriverWorkflow}/> */}
                         <input type="submit" value="I can drive"/>
                     </div>
                     <p className="error">{error}</p>

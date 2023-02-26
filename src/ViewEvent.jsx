@@ -5,10 +5,14 @@ import { DisplayEvent } from "./components/DisplayEvent";
 import { UserRegister } from "./components/UserRegister";
 
 import { getEvent } from "./api-utils";
+import { joinCar } from "./api-utils";
 import "./ViewEvent.css";
 
 export function ViewEventPage(_) {
     const [event, setEvent] = useState();
+    const [rider, setRider] = useState("");
+    const [driver, setDriver] = useState("");
+
     const [searchParams] = useSearchParams();
 
     let eventIdParam = searchParams.get("e");
@@ -26,7 +30,15 @@ export function ViewEventPage(_) {
         }
     }, [eventIdParam]);
 
+    useEffect(() => {
+        if (rider && driver && event) {
+            joinCar(eventIdParam, driver).catch(error => console.error(error));
+        }
+    }, [rider, driver])
+
     console.log(event);
+    console.log(`driver: ${driver}`);
+    console.log(`rider: ${rider}`);
 
   return (
         <>
@@ -36,8 +48,12 @@ export function ViewEventPage(_) {
                         <p>Invite Friends: <a href={invite_url}>{invite_url}</a></p>
                     </div>
                     <div className="display-event">
-                        <UserRegister eventId={event} />
-                        <DisplayEvent event={event} />
+                        <UserRegister eventId={event.id} setParentRider={setRider} />
+                        <DisplayEvent
+                            event={event}
+                            setParentDriver={setDriver}
+                            isRiderNameEntered={rider != ""}
+                        />
                     </div>
                 </div>
             ) : (
