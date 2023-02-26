@@ -59,14 +59,16 @@ export function UserRegister(props) {
 
         setUiState(State.Seats);
     }
-    
+
     const createCarForCurrentEvent = (event) => {
         event.preventDefault();
 
         addCarToEvent(eventId, name, capacity)
+            .then(() => {
+                updateParentEvent(eventId);
+            })
             .catch(error => console.error(error));
-        
-        updateParentEvent(eventId);
+
         setUiState(State.Login);
     }
 
@@ -74,7 +76,7 @@ export function UserRegister(props) {
         if (!validateName(name)) {
             return
         }
-        
+
         setUiState(State.ShowRide);
     }
 

@@ -32,10 +32,13 @@ export function ViewEventPage(_) {
 
     useEffect(() => {
         if (rider!=="" && driver!=="" && event) {
-            joinCar(eventIdParam, rider, driver).catch(error => console.error(error));
-            setDriver("");
-            setRider("");
-            fetchEventFromApi(eventIdParam);
+            joinCar(eventIdParam, rider, driver)
+                .then(() => {
+                    setDriver("");
+                    setRider("");
+                    fetchEventFromApi(eventIdParam);
+                })
+                .catch(error => console.error(error));
         }
     }, [rider, driver])
 
