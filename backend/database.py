@@ -110,7 +110,7 @@ def create_event(name: str) -> str:
     # create a random id string
     random_bytes: bytes = random.randbytes(11)
     event_id: str = base64.urlsafe_b64encode(random_bytes).decode('utf-8')
-    while session.query(exists().where(Event.c.event_id == event_id)).scalar():
+    while session.query(Event).filter_by(event_id=event_id).first() is None:
         random_bytes: bytes = random.randbytes(11)
         event_id = base64.urlsafe_b64encode(random_bytes).decode('utf-8')
 
@@ -147,8 +147,7 @@ def read_event(event_id: str) -> Event:
 
 def update_event_name(event_id: str, name: str) -> bool:
     session = DB_Session()
-    event = session.query(exists().where(Event.c.event_id == event_id))
-    event.scalar(event).one().name == name
+    session.query(Event).filter_by(Event.event_id == event_id).first().name = name
 
     session.commit()
     session.remove()
