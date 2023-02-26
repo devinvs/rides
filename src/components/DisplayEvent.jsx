@@ -9,14 +9,14 @@ export function DisplayEevnt(props) {
     let event = props.event;
 
     return (
-        <div id="parking-lot" className="parking-lot">
-            {event.cars.map((car, i) =>
+        <div className="parking-lot">
+            {event.cars.map(car =>
                 <>
+                <Line />
                 <Car car={car} />
-                {i===car.length-1? null: <Line />
-                }
                 </>
             )}
+            <Line />
         </div>
     )
 };

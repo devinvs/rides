@@ -7,14 +7,23 @@
 .parking-lot {
     padding: 20px;
     padding-right: 0;
+
+    background-color: #333;
+    height: 100%;
+    margin-left: 100px;
+
+    border-radius: 24px 0 0 24px;
+    height: 100%;
 }
 
 .parking-line {
     position: absolute;
 
     height: 10px;
-    background-color: yellow;
+    background-color: #e2c154;
     width: 40%;
 
     right: 0;
+
+    border-radius: 4px 0 0 4px;
 }
