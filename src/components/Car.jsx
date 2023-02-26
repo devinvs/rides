@@ -39,6 +39,8 @@ export function Car(props) {
         <div className="car">
             <p className="driver">{car.driver}</p>
             <div className="riders">
+                <div className="wheel1" />
+                <div className="wheel2" />
                 {
                     renderedSeats.map((row, i) =>
                         <div className="rider-row">
@@ -48,6 +50,8 @@ export function Car(props) {
                             )}
                         </div>
                 )}
+                <div className="wheel3" />
+                <div className="wheel4" />
             </div>
         </div>
     )
