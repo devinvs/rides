@@ -7,7 +7,7 @@ import { UserRegister } from "./components/UserRegister";
 import { getEvent } from "./api-utils";
 import "./ViewEvent.css";
 
-export function ViewEventPage(props) {
+export function ViewEventPage(_) {
     const [event, setEvent] = useState();
     const [searchParams] = useSearchParams();
 
@@ -34,7 +34,7 @@ export function ViewEventPage(props) {
                         <p>Invite Friends: <a href={invite_url}>{invite_url}</a></p>
                     </div>
                     <div className="display-event">
-                        <UserRegister />
+                        <UserRegister eventId={event} />
                         <DisplayEevnt event={event} />
                     </div>
                 </div>
@@ -44,3 +44,4 @@ export function ViewEventPage(props) {
         </>
     );
 }
+
