@@ -30,6 +30,11 @@ export function DisplayEvent(props) {
                 </>
             )}
             <Line />
+            {event.cars.length===0?
+                <>
+                    <div style={{height: "170px"}} />
+                    <Line />
+                    </>: null}
         </div>
     )
 };
