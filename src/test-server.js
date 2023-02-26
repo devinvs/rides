@@ -36,6 +36,17 @@ app.get('/events/:eventId', (req, res) => {
     });
 })
 
+app.get('/events/:eventId/persons', (req, res) => {
+    console.log("Receive post for login")
+    // let name = req.query.;
+    let riders =  ["Devin", "Mathew", "Justin"];
+
+    res.json({
+        riders: riders,
+        driver: "Nicholas",
+    });
+})
+
 app.post('/events', (_, res) => {
     console.log("Receive post for /events");
 

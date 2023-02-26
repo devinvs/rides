@@ -33,12 +33,13 @@ export function ViewEventPage(_) {
     useEffect(() => {
         if (rider && driver && event) {
             joinCar(eventIdParam, driver).catch(error => console.error(error));
+            fetchEventFromApi(eventIdParam);
         }
     }, [rider, driver])
 
-    console.log(event);
-    console.log(`driver: ${driver}`);
-    console.log(`rider: ${rider}`);
+    // console.log(event);
+    // console.log(`driver: ${driver}`);
+    // console.log(`rider: ${rider}`);
 
   return (
         <>
@@ -48,7 +49,7 @@ export function ViewEventPage(_) {
                         <p>Invite Friends: <a href={invite_url}>{invite_url}</a></p>
                     </div>
                     <div className="display-event">
-                        <UserRegister eventId={event.id} setParentRider={setRider} />
+                        <UserRegister eventId={eventIdParam} setParentRider={setRider} />
                         <DisplayEvent
                             event={event}
                             setParentDriver={setDriver}
