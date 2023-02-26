@@ -16,19 +16,21 @@ export function ViewEventPage(_) {
 
     const fetchEventFromApi = (eventId) => {
         getEvent(eventId)
-            .then(fectchedEvent => setEvent(fectchedEvent))
+            .then(fectchedEvent => {console.log(fectchedEvent);setEvent(fectchedEvent)})
             .catch(error => console.error(error));
     };
 
     useEffect(() => {
         if (eventIdParam) {
-        fetchEventFromApi(eventIdParam);
+            fetchEventFromApi(eventIdParam);
         }
     }, [eventIdParam]);
 
+    console.log(event);
+
   return (
         <>
-            {event ? (
+            {event? (
                 <div className="view-event-page">
                     <div className="banner">
                         <p>Invite Friends: <a href={invite_url}>{invite_url}</a></p>

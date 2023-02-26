@@ -18,13 +18,10 @@
 }
 
 .parking-line {
-    position: absolute;
-
     height: 10px;
     background-color: #e2c154;
-    width: 40%;
-
-    right: 0;
+    width: 70%;
 
     border-radius: 4px 0 0 4px;
+    margin-left: auto;
 }
