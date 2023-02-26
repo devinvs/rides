@@ -94,6 +94,14 @@ class Rider(Based):
 
 
 def get_unassigned(session, event_id: str) -> list[str]:
+    (
+        session.query(Rider)
+            .join(Event)
+            .filter(Event.id==event_id)
+            .filter(Rider.car_id is None)
+    )
+
+    event = session.query(Event)
     event = session.scalars(select(Event).where(event_id=event_id)).one()
     result: list[str] = list()
     for rider in event.riders:
