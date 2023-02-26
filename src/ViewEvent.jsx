@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
-import { DisplayEevnt } from "./components/DisplayEvent";
+import { DisplayEvent } from "./components/DisplayEvent";
 import { UserRegister } from "./components/UserRegister";
 
 import { getEvent } from "./api-utils";
@@ -35,7 +35,7 @@ export function ViewEventPage(_) {
                     </div>
                     <div className="display-event">
                         <UserRegister eventId={event} />
-                        <DisplayEevnt event={event} />
+                        <DisplayEvent event={event} />
                     </div>
                 </div>
             ) : (

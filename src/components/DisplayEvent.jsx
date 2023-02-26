@@ -5,7 +5,7 @@ const Line = () => {
     return <div className="parking-line"></div>
 }
 
-export function DisplayEevnt(props) {
+export function DisplayEvent(props) {
     let event = props.event;
 
     return (
