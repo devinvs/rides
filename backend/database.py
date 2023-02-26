@@ -152,9 +152,6 @@ def add_car_to_event(session, event_id: str, name: str, cap: int):
     add_unassigned_to_car(session, event_id)
     session.commit()
 
-    # Events[event_id].cars.append(car)
-    # return Events[event_id]
-
 
 def add_unassigned_to_event(session, event_id: str, name: str):
     evt: Event = read_event(session, event_id)
@@ -247,7 +244,7 @@ def get_event_user_info(session, event_id: str, name: str):
 
     if rider is not None:
         if rider.car is None:
-            return None
+            return {"driver": "", "riders": []}
 
         return {
             "driver": rider.car.driver_name,
