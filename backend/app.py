@@ -73,7 +73,7 @@ def get_person_type(event_id: str):
     if database.read_event(session, event_id) is None:
         return "Invalid event_id: event does not exist"
 
-    name = request.json.get("name")
+    name = request.args.get("name")
     data = database.get_event_user_info(session, event_id, name)
 
     if data is None:
