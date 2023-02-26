@@ -8,8 +8,11 @@ export async function getEvent(eventId) {
 
 // Create a new event and returns the id of the event
 export async function createEvent(name) {
-    const data = {name: name}
+    const data = {event_name: name}
     const res = await fetch(`${apiBase}/events`, {
+        headers: {
+            "Content-Type": "application/json"
+        },
         method: "POST",
         body: JSON.stringify(data)
     });
@@ -31,6 +34,9 @@ export async function login(eventId, name) {
 export async function joinCar(eventId, driverName) {
     const data = { driver: driverName };
     const res = await fetch(`${apiBase}/events/${eventId}/riders`, {
+        headers: {
+            "Content-Type": "application/json"
+        },
         method: "POST",
         body: JSON.stringify(data),
     });
