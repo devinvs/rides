@@ -45,6 +45,11 @@ export function DisplayEvent(props) {
                     <div style={{height: "170px"}} />
                     <Line />
                     </>: null}
+
+        {event.unassigned.length === 0? null: 
+        <h4 style={{color: 'white'}}>Unassigned</h4>
+        }
+        {event.unassigned.map(p => <p style={{color: '#dfdfdf'}}>{p}</p>)}
         </div>
     )
 };
